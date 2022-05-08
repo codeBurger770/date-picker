@@ -36,8 +36,10 @@ export function DatePicker(props: IDatePickerProps) {
         }));
     }, [monthActive, dateActive]);
 
-    const handleClickArrowPrev = useCallback(() => setMonthActive(monthActivePrev => monthActivePrev - 1), []);
-    const handleClickArrowNext = useCallback(() => setMonthActive(monthActivePrev => monthActivePrev + 1), []);
+    const handleClickArrowMonthPrev = useCallback(() => setMonthActive(monthActivePrev => monthActivePrev - 1), []);
+    const handleClickArrowMonthNext = useCallback(() => setMonthActive(monthActivePrev => monthActivePrev + 1), []);
+    const handleClickArrowYearPrev = useCallback(() => setMonthActive(monthActivePrev => monthActivePrev - 12), []);
+    const handleClickArrowYearNext = useCallback(() => setMonthActive(monthActivePrev => monthActivePrev + 12), []);
     const handleClickDay = useCallback((day: number) => {
         const date = new Date(NOW_YEAR, monthActive, day);
         setDateActive(date);
@@ -47,9 +49,11 @@ export function DatePicker(props: IDatePickerProps) {
     return (
         <div className={styles.datePicker}>
             <div className={styles.datePicker__header}>
-                <div className={styles.datePicker__arrow} onClick={handleClickArrowPrev}>&lt;</div>
-                <div>{monthAndYear}</div>
-                <div className={styles.datePicker__arrow} onClick={handleClickArrowNext}>&gt;</div>
+                <div className={styles.datePicker__arrow} onClick={handleClickArrowYearPrev}>&lt;&lt;</div>
+                <div className={styles.datePicker__arrow} onClick={handleClickArrowMonthPrev}>&lt;</div>
+                <div className={styles.datePicker__monthAndYear}>{monthAndYear}</div>
+                <div className={styles.datePicker__arrow} onClick={handleClickArrowMonthNext}>&gt;</div>
+                <div className={styles.datePicker__arrow} onClick={handleClickArrowYearNext}>&gt;&gt;</div>
             </div>
             <div className={styles.datePicker__body}>
                 <>

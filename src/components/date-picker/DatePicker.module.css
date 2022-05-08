@@ -7,13 +7,17 @@
 
 .datePicker__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
 .datePicker__body {
   display: flex;
   flex-wrap: wrap;
+}
+
+.datePicker__monthAndYear {
+  flex: 1;
+  text-align: center;
 }
 
 .datePicker__arrow,
