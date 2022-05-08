@@ -1,3 +1,23 @@
+.dateRangePicker__pickers > * {
+  margin-bottom: 15px;
+}
+
+.dateRangePicker__range {
+  font-family: sans-serif;
+  color: #646478;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .dateRangePicker__pickers {
+    display: flex;
+  }
+
+  .dateRangePicker__pickers > *:first-child {
+    margin-right: 15px;
+  }
+}
+
 .datePicker {
   width: 280px;
   font-family: sans-serif;
@@ -42,4 +62,10 @@
 .datePicker__day_selected {
   background-color: #f26126;
   color: #fff;
+}
+
+.datePicker__day_highlighted {
+  background-color: #f26126;
+  color: #fff;
+  opacity: 0.5;
 }
