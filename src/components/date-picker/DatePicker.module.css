@@ -1,0 +1,42 @@
+.datePicker {
+  width: 280px;
+  font-family: sans-serif;
+  color: #646478;
+  user-select: none;
+}
+
+.datePicker__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.datePicker__body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.datePicker__arrow,
+.datePicker__void,
+.datePicker__day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.datePicker__arrow:hover {
+  cursor: pointer;
+  color: #9393a1;
+}
+
+.datePicker__day:hover {
+  cursor: pointer;
+  border: 1px solid #9393a1;
+}
+
+.datePicker__day_active {
+  background-color: #f26126;
+  color: #fff;
+}
