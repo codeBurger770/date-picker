@@ -3,6 +3,8 @@ import styles from "./DatePicker.module.css";
 
 export interface IDatePickerProps {
     date?: Date;
+    dateMin?: Date;
+    dateMax?: Date;
     onChange?(date?: Date): void;
 }
 
@@ -34,11 +36,16 @@ export function DatePicker(props: IDatePickerProps) {
         [...new Array(dayAmount)].forEach((_, j) => {
             const dateByDay = new Date(NOW_YEAR, month, j + 1);
             const isSelected = dateByDay.getTime() === date?.getTime() || dateByDay.getTime() === date?.getTime();
+            const isDisabled = (props.dateMin && dateByDay.getTime() < props.dateMin.getTime()) || (props.dateMax && dateByDay.getTime() > props.dateMax.getTime());
             days.push(
                 <div
                     key={`day-${j}`}
-                    className={`${styles.datePicker__day} ${isSelected ? styles.datePicker__day_selected : ''}`}
-                    onClick={() => setDate(dateByDay)}
+                    className={`
+                        ${styles.datePicker__day} 
+                        ${isSelected ? styles.datePicker__day_selected : ''}
+                        ${isDisabled ? styles.datePicker__day_disabled : ''}
+                    `}
+                    onClick={isDisabled ? undefined : () => setDate(dateByDay)}
                 >
                     {j + 1}
                 </div>
@@ -48,7 +55,7 @@ export function DatePicker(props: IDatePickerProps) {
             monthAndYear: `${MONTHS[dateByMonth.getMonth()]} ${dateByMonth.getFullYear()}`,
             days,
         };
-    }, [month, date]);
+    }, [props.dateMin, props.dateMax, month, date]);
 
     return (
         <div className={styles.datePicker}>

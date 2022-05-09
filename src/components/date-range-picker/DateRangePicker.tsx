@@ -3,6 +3,8 @@ import styles from "./DateRangePicker.module.css";
 
 export interface IDateRangePickerProps {
     dates?: Date[];
+    dateMin?: Date;
+    dateMax?: Date;
     onChange?(date?: Date[]): void;
 }
 
@@ -39,16 +41,18 @@ export function DateRangePicker(props: IDateRangePickerProps) {
             [...new Array(dayAmount)].forEach((_, j) => {
                 const dateByDay = new Date(NOW_YEAR, i, j + 1);
                 const isSelected = dateByDay.getTime() === dates[0]?.getTime() || dateByDay.getTime() === dates[1]?.getTime();
-                const isРighlighted = dates.length === 2 && dateByDay.getTime() > dates[0].getTime() && dateByDay.getTime() < dates[1].getTime();
+                const isInner = dates.length === 2 && dateByDay.getTime() > dates[0].getTime() && dateByDay.getTime() < dates[1].getTime();
+                const isDisabled = (props.dateMin && dateByDay.getTime() < props.dateMin.getTime()) || (props.dateMax && dateByDay.getTime() > props.dateMax.getTime());
                 days.push(
                     <div
                         key={`day-${j}`}
                         className={`
                             ${styles.datePicker__day}
                             ${isSelected ? styles.datePicker__day_selected : ''}
-                            ${isРighlighted ? styles.datePicker__day_highlighted : ''}
+                            ${isInner ? styles.datePicker__day_inner : ''}
+                            ${isDisabled ? styles.datePicker__day_disabled : ''}
                         `}
-                        onClick={() => addDate(dateByDay)}
+                        onClick={isDisabled ? undefined : () => addDate(dateByDay)}
                     >
                         {j + 1}
                     </div>
@@ -60,7 +64,7 @@ export function DateRangePicker(props: IDateRangePickerProps) {
             });
         });
         return datePickers;
-    }, [months, dates]);
+    }, [props.dateMin, props.dateMax, months, dates]);
 
     const range = useMemo(() => {
         return dates.length === 2 ? `${dates[0].toLocaleDateString('ru')} - ${dates[1].toLocaleDateString('ru')}` : '';

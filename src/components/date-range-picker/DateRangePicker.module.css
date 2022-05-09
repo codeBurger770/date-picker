@@ -54,7 +54,7 @@
   color: #9393a1;
 }
 
-.datePicker__day:not(.datePicker__day_empty):hover {
+.datePicker__day:not(.datePicker__day_empty):not(.datePicker__day_disabled):hover {
   cursor: pointer;
   border: 1px solid #9393a1;
 }
@@ -64,8 +64,14 @@
   color: #fff;
 }
 
-.datePicker__day_highlighted {
+.datePicker__day_inner {
   background-color: #f26126;
+  color: #fff;
+  opacity: 0.5;
+}
+
+.datePicker__day_disabled {
+  background-color: #9393a1;
   color: #fff;
   opacity: 0.5;
 }
