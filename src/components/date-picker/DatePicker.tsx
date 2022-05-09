@@ -26,29 +26,28 @@ export function DatePicker(props: IDatePickerProps) {
         const dateByMonth = new Date(NOW_YEAR, month);
         dateByMonth.setDate(1);
         const dayWeek = dateByMonth.getDay();
-        const days = [...new Array(dayWeek ? dayWeek - 1 : 6)].map((_, j) => (
-            <div
-                key={`day-empty-${j}`}
-                className={`${styles.datePicker__day} ${styles.datePicker__day_empty}`}
-            />
-        ));
         const dayAmount = new Date(dateByMonth.getFullYear(), dateByMonth.getMonth() + 1, 0).getDate();
-        [...new Array(dayAmount)].forEach((_, j) => {
+        const days = [...new Array(dayAmount)].map((_, j) => {
             const dateByDay = new Date(NOW_YEAR, month, j + 1);
-            const isSelected = dateByDay.getTime() === date?.getTime() || dateByDay.getTime() === date?.getTime();
             const isDisabled = (props.dateMin && dateByDay.getTime() < props.dateMin.getTime()) || (props.dateMax && dateByDay.getTime() > props.dateMax.getTime());
-            days.push(
+            const isSelected = dateByDay.getTime() === date?.getTime() || dateByDay.getTime() === date?.getTime();
+            return isDisabled ? (
                 <div
-                    key={`day-${j}`}
-                    className={`
-                        ${styles.datePicker__day} 
-                        ${isSelected ? styles.datePicker__day_selected : ''}
-                        ${isDisabled ? styles.datePicker__day_disabled : ''}
-                    `}
-                    onClick={isDisabled ? undefined : () => setDate(dateByDay)}
+                    key={j}
+                    className={`${styles.datePicker__day} ${styles.datePicker__day_disabled}`}
+                    style={{ marginLeft: j ? undefined : (dayWeek ? dayWeek - 1 : 6) * 40 }}
                 >
                     {j + 1}
                 </div>
+            ) : (
+                <button
+                    key={j}
+                    className={`${styles.datePicker__day} ${isSelected ? styles.datePicker__day_selected : ''}`}
+                    style={{ marginLeft: j ? undefined : (dayWeek ? dayWeek - 1 : 6) * 40 }}
+                    onClick={() => setDate(dateByDay)}
+                >
+                    {j + 1}
+                </button>
             );
         });
         return {
@@ -60,11 +59,11 @@ export function DatePicker(props: IDatePickerProps) {
     return (
         <div className={styles.datePicker}>
             <div className={styles.datePicker__header}>
-                <div className={styles.datePicker__arrow} onClick={() => addMonth(-12)}>{'<<'}</div>
-                <div className={styles.datePicker__arrow} onClick={() => addMonth(-1)}>{'<'}</div>
+                <button className={styles.datePicker__arrow} onClick={() => addMonth(-12)}>{'<<'}</button>
+                <button className={styles.datePicker__arrow} onClick={() => addMonth(-1)}>{'<'}</button>
                 <div className={styles.datePicker__monthAndYear}>{monthAndYear}</div>
-                <div className={styles.datePicker__arrow} onClick={() => addMonth(1)}>{'>'}</div>
-                <div className={styles.datePicker__arrow} onClick={() => addMonth(12)}>{'>>'}</div>
+                <button className={styles.datePicker__arrow} onClick={() => addMonth(1)}>{'>'}</button>
+                <button className={styles.datePicker__arrow} onClick={() => addMonth(12)}>{'>>'}</button>
             </div>
             <div className={styles.datePicker__body}>{days}</div>
         </div>

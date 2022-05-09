@@ -31,31 +31,32 @@ export function DateRangePicker(props: IDateRangePickerProps) {
             const dateByMonth = new Date(NOW_YEAR, i);
             dateByMonth.setDate(1);
             const dayWeek = dateByMonth.getDay();
-            const days = [...new Array(dayWeek ? dayWeek - 1 : 6)].map((_, j) => (
-                <div
-                    key={`day-empty-${j}`}
-                    className={`${styles.datePicker__day} ${styles.datePicker__day_empty}`}
-                />
-            ));
             const dayAmount = new Date(dateByMonth.getFullYear(), dateByMonth.getMonth() + 1, 0).getDate();
-            [...new Array(dayAmount)].forEach((_, j) => {
+            const days = [...new Array(dayAmount)].map((_, j) => {
                 const dateByDay = new Date(NOW_YEAR, i, j + 1);
+                const isDisabled = (props.dateMin && dateByDay.getTime() < props.dateMin.getTime()) || (props.dateMax && dateByDay.getTime() > props.dateMax.getTime());
                 const isSelected = dateByDay.getTime() === dates[0]?.getTime() || dateByDay.getTime() === dates[1]?.getTime();
                 const isInner = dates.length === 2 && dateByDay.getTime() > dates[0].getTime() && dateByDay.getTime() < dates[1].getTime();
-                const isDisabled = (props.dateMin && dateByDay.getTime() < props.dateMin.getTime()) || (props.dateMax && dateByDay.getTime() > props.dateMax.getTime());
-                days.push(
+                return isDisabled ? (
                     <div
-                        key={`day-${j}`}
+                        key={j}
+                        className={`${styles.datePicker__day} ${styles.datePicker__day_disabled}`}
+                        style={{ marginLeft: j ? undefined : (dayWeek ? dayWeek - 1 : 6) * 40 }}
+                    >
+                        {j + 1}
+                    </div>
+                ) : (
+                    <button
+                        key={j}
                         className={`
                             ${styles.datePicker__day}
                             ${isSelected ? styles.datePicker__day_selected : ''}
                             ${isInner ? styles.datePicker__day_inner : ''}
-                            ${isDisabled ? styles.datePicker__day_disabled : ''}
                         `}
-                        onClick={isDisabled ? undefined : () => addDate(dateByDay)}
+                        onClick={() => addDate(dateByDay)}
                     >
                         {j + 1}
-                    </div>
+                    </button>
                 );
             });
             datePickers.push({
@@ -75,29 +76,37 @@ export function DateRangePicker(props: IDateRangePickerProps) {
             <div className={styles.dateRangePicker__pickers}>
                 <div className={styles.datePicker}>
                     <div className={styles.datePicker__header}>
-                        <div className={styles.datePicker__arrow} onClick={() => addMonths([-12, 0])}>{'<<'}</div>
-                        <div className={styles.datePicker__arrow} onClick={() => addMonths([-1, 0])}>{'<'}</div>
+                        <button className={styles.datePicker__arrow} onClick={() => addMonths([-12, 0])}>{'<<'}</button>
+                        <button className={styles.datePicker__arrow} onClick={() => addMonths([-1, 0])}>{'<'}</button>
                         <div className={styles.datePicker__monthAndYear}>{datePickers[0].monthAndYear}</div>
-                        <div className={styles.datePicker__arrow} onClick={monthsDiff > 1 ? () => addMonths([1, 0]) : undefined}>
-                            {monthsDiff > 1 ? '>' : ''}
-                        </div>
-                        <div className={styles.datePicker__arrow} onClick={monthsDiff > 12 ? () => addMonths([12, 0]) : undefined}>
-                            {monthsDiff > 12 ? '>>' : ''}
-                        </div>
+                        {monthsDiff > 1 ? (
+                            <button className={styles.datePicker__arrow} onClick={() => addMonths([1, 0])}>{'>'}</button>
+                        ) : (
+                            <div className={`${styles.datePicker__arrow} ${styles.datePicker__arrow_disabled}`} />
+                        )}
+                        {monthsDiff > 12 ? (
+                            <button className={styles.datePicker__arrow} onClick={() => addMonths([12, 0])}>{'>>'}</button>
+                        ) : (
+                            <div className={`${styles.datePicker__arrow} ${styles.datePicker__arrow_disabled}`} />
+                        )}
                     </div>
                     <div className={styles.datePicker__body}>{datePickers[0].days}</div>
                 </div>
                 <div className={styles.datePicker}>
                     <div className={styles.datePicker__header}>
-                        <div className={styles.datePicker__arrow} onClick={monthsDiff > 12 ? () => addMonths([0, -12]) : undefined}>
-                            {monthsDiff > 12 ? '<<' : ''}
-                        </div>
-                        <div className={styles.datePicker__arrow} onClick={monthsDiff > 1 ? () => addMonths([0, -1]) : undefined}>
-                            {monthsDiff > 1 ? '<' : ''}
-                        </div>
+                        {monthsDiff > 12 ? (
+                            <button className={styles.datePicker__arrow} onClick={() => addMonths([0, -12])}>{'<<'}</button>
+                        ) : (
+                            <div className={`${styles.datePicker__arrow} ${styles.datePicker__arrow_disabled}`} />
+                        )}
+                        {monthsDiff > 1 ? (
+                            <button className={styles.datePicker__arrow} onClick={() => addMonths([0, -1])}>{'<'}</button>
+                        ) : (
+                            <div className={`${styles.datePicker__arrow} ${styles.datePicker__arrow_disabled}`} />
+                        )}
                         <div className={styles.datePicker__monthAndYear}>{datePickers[1].monthAndYear}</div>
-                        <div className={styles.datePicker__arrow} onClick={() => addMonths([0, 1])}>{'>'}</div>
-                        <div className={styles.datePicker__arrow} onClick={() => addMonths([0, 12])}>{'>>'}</div>
+                        <button className={styles.datePicker__arrow} onClick={() => addMonths([0, 1])}>{'>'}</button>
+                        <button className={styles.datePicker__arrow} onClick={() => addMonths([0, 12])}>{'>>'}</button>
                     </div>
                     <div className={styles.datePicker__body}>{datePickers[1].days}</div>
                 </div>

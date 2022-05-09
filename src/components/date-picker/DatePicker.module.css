@@ -1,8 +1,8 @@
 .datePicker {
   width: 280px;
+  user-select: none;
   font-family: sans-serif;
   color: #646478;
-  user-select: none;
 }
 
 .datePicker__header {
@@ -27,14 +27,23 @@
   align-items: center;
   width: 40px;
   height: 40px;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  outline: none;
+  font-family: sans-serif;
+  font-size: 16px;
+  color: #646478;
 }
 
-.datePicker__arrow:hover {
+.datePicker__arrow:hover,
+.datePicker__arrow:focus {
   cursor: pointer;
-  color: #9393a1;
+  color: #f26126;
 }
 
-.datePicker__day:not(.datePicker__day_empty):not(.datePicker__day_disabled):hover {
+.datePicker__day:not(.datePicker__day_disabled):hover,
+.datePicker__day:not(.datePicker__day_disabled):focus {
   cursor: pointer;
   border: 1px solid #9393a1;
 }
