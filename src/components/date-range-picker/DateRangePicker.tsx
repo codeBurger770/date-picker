@@ -5,7 +5,7 @@ export interface IDateRangePickerProps {
     dates?: Date[];
     dateMin?: Date;
     dateMax?: Date;
-    onChange?(date?: Date[]): void;
+    onChange?(dates?: Date[]): void;
 }
 
 const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
@@ -53,6 +53,7 @@ export function DateRangePicker(props: IDateRangePickerProps) {
                             ${isSelected ? styles.datePicker__day_selected : ''}
                             ${isInner ? styles.datePicker__day_inner : ''}
                         `}
+                        style={{ marginLeft: j ? undefined : (dayWeek ? dayWeek - 1 : 6) * 40 }}
                         onClick={() => addDate(dateByDay)}
                     >
                         {j + 1}
